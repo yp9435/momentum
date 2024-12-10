@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "autoprefixer": "^10.4.20",
     "bcrypt": "^5.1.1",
     "mongodb": "^6.11.0",
     "mongoose": "^8.8.4",
