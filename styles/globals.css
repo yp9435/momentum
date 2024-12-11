@@ -168,3 +168,12 @@
 .flex-between {
   @apply flex justify-between items-center;
 }
+
+.footer {
+  text-align: center;
+  padding: 1rem;
+  background-color: #f8f9fa; /* Light gray background */
+  color: #6c757d; /* Muted text color */
+  font-size: 0.875rem; /* Small text */
+  margin-top: auto; /* Push to bottom */
+}
