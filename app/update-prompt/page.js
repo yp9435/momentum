@@ -1,20 +1,22 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useRouter } from "next/router"; // Use next/router instead of next/navigation
+import { useRouter, useSearchParams } from "next/navigation"; // Ensure you're using the right hook
 
 import Form from "@components/Form";
 
 const UpdatePrompt = () => {
   const router = useRouter();
-  const { id: promptId } = router.query; // Extract the query parameter manually
+  const searchParams = useSearchParams();
+  const promptId = searchParams.get("id"); // Get 'id' from search params
 
   const [post, setPost] = useState({ prompt: "", tag: "" });
   const [submitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
     const getPromptDetails = async () => {
-      if (!promptId) return; // Ensure promptId is available before fetching
+      if (!promptId) return; // Avoid fetching if there's no promptId
+
       try {
         const response = await fetch(`/api/prompt/${promptId}`);
         const data = await response.json();
@@ -28,8 +30,10 @@ const UpdatePrompt = () => {
       }
     };
 
-    getPromptDetails();
-  }, [promptId]);
+    if (promptId) {
+      getPromptDetails(); // Fetch only if promptId is available
+    }
+  }, [promptId]); // Only re-run when promptId changes
 
   const updatePrompt = async (e) => {
     e.preventDefault();
@@ -37,6 +41,7 @@ const UpdatePrompt = () => {
 
     if (!promptId) {
       alert("Missing PromptId!");
+      setIsSubmitting(false);
       return;
     }
 
@@ -53,7 +58,7 @@ const UpdatePrompt = () => {
       });
 
       if (response.ok) {
-        router.push("/");
+        router.push("/"); // Navigate back to homepage after updating
       } else {
         console.error("Failed to update the prompt");
       }
