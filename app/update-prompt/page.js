@@ -1,21 +1,22 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useRouter, useSearchParams } from "next/navigation"; // Ensure you're using the right hook
+import { useRouter, useSearchParams } from "next/navigation"; // Ensure you're using next/navigation
 
 import Form from "@components/Form";
 
 const UpdatePrompt = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const promptId = searchParams.get("id"); // Get 'id' from search params
+  const promptId = searchParams.get("id"); // Get 'id' from query params
 
   const [post, setPost] = useState({ prompt: "", tag: "" });
   const [submitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
+    // Only fetch data if promptId is available
     const getPromptDetails = async () => {
-      if (!promptId) return; // Avoid fetching if there's no promptId
+      if (!promptId) return; // Ensure promptId is available before fetching
 
       try {
         const response = await fetch(`/api/prompt/${promptId}`);
@@ -30,10 +31,11 @@ const UpdatePrompt = () => {
       }
     };
 
+    // Run getPromptDetails only if promptId exists
     if (promptId) {
-      getPromptDetails(); // Fetch only if promptId is available
+      getPromptDetails();
     }
-  }, [promptId]); // Only re-run when promptId changes
+  }, [promptId]);
 
   const updatePrompt = async (e) => {
     e.preventDefault();
